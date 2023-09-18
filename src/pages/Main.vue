@@ -62,6 +62,22 @@
           </v-item>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <v-item v-slot="{ selectedClass }">
+            <v-card
+              variant="outlined"
+              :class="selectedClass"
+              @click.prevent="signOrVerifyFile"
+              id="main-page-sign-or-verify-file"
+            >
+              <v-card-title>
+                Sign Or Verify a file
+              </v-card-title>
+            </v-card>
+          </v-item>
+        </v-col>
+      </v-row>
     </v-container>
   </v-item-group>
 </template>
@@ -128,6 +144,10 @@ async function selectVersion () {
 
 async function flashDevice () {
   await window.api.invoke('krux:change:page', { page: 'FlashToDevice' })
+}
+
+async function signOrVerifyFile () {
+  await window.api.invoke('krux:change:page', { page: 'SignOrVerify' })
 }
 
 onMounted(async function () {

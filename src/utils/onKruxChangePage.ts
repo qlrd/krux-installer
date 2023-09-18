@@ -14,6 +14,11 @@ export default function (
       delete data.value.messages
       delete data.value.indexes
     }
+    
     page.value = result.page
+
+    if (page.value === 'SignOrVerify') {
+      data.value.clickMessage = 'Choose a file to sign'
+    }
   }
 }

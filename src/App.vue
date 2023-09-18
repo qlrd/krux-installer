@@ -32,6 +32,7 @@ import DownloadTestFirmware from './pages/DownloadTestFirmware.vue';
 import DownloadTestKboot from './pages/DownloadTestKboot.vue';
 import DownloadTestKtool from './pages/DownloadTestKtool.vue';
 import FlashToDevice from './pages/FlashToDevice.vue';
+import SignOrVerify from './pages/SignOrVerify.vue';
 
 /**
  * Methods: These function will
@@ -53,7 +54,7 @@ import onKruxUnzip from './utils/onKruxUnzip';
 import onKruxFlash from './utils/onKruxFlash';
 import onKruxFlashData from './utils/onKruxFlashData';
 import onKruxUnzipData from './utils/onKruxUnzipData';
-
+import onKruxFilePicker from './utils/onKruxFilePicker';
 
 /**
  * Reference for which component will be used as showing page
@@ -95,7 +96,8 @@ const pages: Ref<Record<string, any>> = shallowRef({
   'DownloadTestFirmware': DownloadTestFirmware,
   'DownloadTestKboot': DownloadTestKboot,
   'DownloadTestKtool': DownloadTestKtool,
-  'FlashToDevice': FlashToDevice
+  'FlashToDevice': FlashToDevice,
+  'SignOrVerify': SignOrVerify
 })
 
 /**
@@ -108,6 +110,8 @@ const pages: Ref<Record<string, any>> = shallowRef({
  * * onError: Channels that have the post-fixed word 'error' in `lib/*.ts` finished calls
  * * onData: Channels that have the post-fixed word 'data' in `lib/*.ts` streaming calls 
  */
+
+// On Success
 window.api.onSuccess('krux:change:page', onKruxChangePage(data, page));
 window.api.onSuccess('krux:verify:openssl',onKruxVerifyOpenssl(data))
 window.api.onSuccess('krux:store:get', onKruxStoreGet(data));
@@ -120,9 +124,14 @@ window.api.onSuccess('krux:verify:releases:hash', onKruxVerifyReleasesHash(data)
 window.api.onSuccess('krux:verify:releases:sign', onKruxVerifyReleaseSign(data));
 window.api.onSuccess('krux:unzip', onKruxUnzip(data));
 window.api.onSuccess('krux:flash', onKruxFlash(data));
+window.api.onSuccess('krux:file:picker', onKruxFilePicker(data));
+
+// On Data
 window.api.onData('krux:download:resources', onKruxDownloadResourcesData(data));
 window.api.onData('krux:unzip', onKruxUnzipData(data));
 window.api.onData('krux:flash', onKruxFlashData(data));
+
+// On Error
 window.api.onError('krux:change:page', onError(data));
 window.api.onError('krux:store:get', onError(data));
 window.api.onError('krux:store:set', onError(data));
@@ -132,7 +141,7 @@ window.api.onError('krux:check:resource',onError(data));
 window.api.onError('krux:download:resources', onError(data));
 window.api.onError('krux:flash', onError(data));
 window.api.onError('krux:unzip', onError(data));
-
+window.api.onError('krux:file:picker', onError(data));
 /**
  * Mounted: when app starts,
  * first show the krux logo to 

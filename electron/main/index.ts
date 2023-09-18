@@ -13,6 +13,7 @@ import StoreGetHandler from '../../lib/store-get'
 import VerifyOpensslHandler from '../../lib/verify-openssl'
 import CheckIfItWillFlashHandler from '../../lib/check-if-it-will-flash'
 import FlashHandler from '../../lib/flash'
+import FilePickerHandler from '../../lib/file-picker'
 
 const { version } = createRequire(import.meta.url)('../../package.json')
 const kruxInstaller = new App(`KruxInstaller | v${version}`)
@@ -27,7 +28,7 @@ kruxInstaller.start(async ({ app, win, ipcMain}) => {
   store.set('version', 'Select version')
   store.set('versions', [])
 
-  // Create download resource handler
+  // Create download resource handler:w
   const changePage = new ChangePageHandler(win, store, ipcMain)
   changePage.build()
 
@@ -75,6 +76,10 @@ kruxInstaller.start(async ({ app, win, ipcMain}) => {
   const flashHandler = new FlashHandler(win, store, ipcMain)
   flashHandler.build()
 
+  // Create a file picker handler
+  const filePickerHandler = new FilePickerHandler(win, store, ipcMain)
+  filePickerHandler.build()
+  
   // Create Wdio test handlers
   // if environment variable WDIO_ELECTRON equals 'true'
   if (process.env.TEST === 'true' && process.env.WDIO_ELECTRON === 'true') {
