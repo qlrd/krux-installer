@@ -1,55 +1,71 @@
 # Krux Installer
 
----
-
-<br/>
 <p align="center">
-  <a href="https://github.com/selfcustody/krux-installer/actions/workflows/build.yml" target="_blank">
-    <img alt="Github build status" src="https://github.com/selfcustody/krux-installer/actions/workflows/build.yml/badge.svg?branch=main" />
+  <a
+    href="https://github.com/selfcustody/krux-installer/actions/workflows/build.yml"
+    target="_blank"
+  >
+    <img
+      alt="Github build status"
+      src="https://github.com/selfcustody/krux-installer/actions/workflows/build.yml/badge.svg?branch=main"
+    />
   </a>
-  <a href="https://github.com/selfcustody/krux-installer/releases">
-    <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/selfcustody/krux-installer/total" />
+  <a
+    href="https://github.com/selfcustody/krux-installer/releases"
+  >
+    <img
+      alt="GitHub all releases"
+      src="https://img.shields.io/github/downloads/selfcustody/krux-installer/total"
+    />
   </a>
-  <a href="https://github.com/fort-nix/nix-bitcoin/commits/main" target="_blank">
-    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/y/selfcustody/krux-installer/main" />
+  <a
+    href="https://github.com/fort-nix/nix-bitcoin/commits/main"
+    target="_blank"
+  >
+    <img
+      alt="GitHub commit activity (branch)"
+      src="https://img.shields.io/github/commit-activity/w/selfcustody/krux-installer/main"
+    />
   </a>
-  <a href="https://github.com/fort-nix/nix-bitcoin/graphs/contributors" target="_blank">
-    <img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/selfcustody/krux-installer" />
+  <a
+    href="https://github.com/fort-nix/nix-bitcoin/graphs/contributors"
+    target="_blank"
+  >
+    <img
+      alt="GitHub contributors"
+      src="https://img.shields.io/github/contributors-anon/selfcustody/krux-installer"
+    />
   </a>
-  <a href="https://github.com/selfcustody/krux-installer/releases/latest" target="_blank""
-    <img alt="GitHub release (latest by SemVer including pre-releases)" src="https://img.shields.io/github/downloads-pre/selfcustody/krux-installer/v0.0.1-alpha-6/total">
+  <a
+    href="https://github.com/selfcustody/krux-installer/releases/latest"
+    target="_blank"
+    <img
+      alt="GitHub release (latest by SemVer including pre-releases)"
+      src="https://img.shields.io/github/downloads-pre/selfcustody/krux-installer/v0.0.1-alpha-6/total"
+    />
   </a>
 </p>
 <br/>
 
-## About
+Krux Installer (beta versions) aims to be a GUI based tool to flash
+[Krux firmware onto supported devices](https://selfcustody.github.io/krux/getting-started/installing/#flash-the-firmware-onto-the-device).
+without type any command.
 
-Krux Installer (alpha versions) aims to be a GUI based tool to build,
-flash and debug [Krux](https://github.com/selfcustody/krux)
+## Deployed machines
 
-As it now, the generated application execute,
-without typing any command in terminal.
+Above are results in deployed in personal machines
+(not in virtual machines like Github Actions):
 
-For more information, see [flash the firmware onto the device](https://selfcustody.github.io/krux/getting-started/installing/#flash-the-firmware-onto-the-device).
-
-## Tested machines
-
-- Linux:
-  - Archlinux;
-  - Ubuntu;
-- Windows:
-  - Windows 10
-
-## Untested machines
-
-- MacOS
-
-**Help Wanted**: we need mac users!
+<p align="center">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Archlinux-pass-green">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Ubuntu-pass-green">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Windows%2010-pass-green">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Mac%20OS%20(help%20wanted)-fail-red">
+</p>
 
 ## Install
 
-- See [releases page](https://github.com/selfcustody/krux-installer/releases);
-or
+- See [releases page](https://github.com/selfcustody/krux-installer/releases); or
 
 - [Build from source](/#build-from-source)
 
