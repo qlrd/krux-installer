@@ -1,6 +1,28 @@
 # Krux Installer
 
-[![Build main branch](https://github.com/selfcustody/krux-installer/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/selfcustody/krux-installer/actions/workflows/build.yml)
+---
+
+<br/>
+<p align="center">
+  <a href="https://github.com/selfcustody/krux-installer/actions/workflows/build.yml" target="_blank">
+    <img alt="Github build status" src="https://github.com/selfcustody/krux-installer/actions/workflows/build.yml/badge.svg?branch=main" />
+  </a>
+  <a href="https://github.com/selfcustody/krux-installer/releases">
+    <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/selfcustody/krux-installer/total" />
+  </a>
+  <a href="https://github.com/fort-nix/nix-bitcoin/commits/main" target="_blank">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/y/selfcustody/krux-installer/main" />
+  </a>
+  <a href="https://github.com/fort-nix/nix-bitcoin/graphs/contributors" target="_blank">
+    <img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/selfcustody/krux-installer" />
+  </a>
+  <a href="https://github.com/selfcustody/krux-installer/releases/latest" target="_blank""
+    <img alt="GitHub release (latest by SemVer including pre-releases)" src="https://img.shields.io/github/downloads-pre/selfcustody/krux-installer/v0.0.1-alpha-6/total">
+  </a>
+</p>
+<br/>
+
+## About
 
 Krux Installer (alpha versions) aims to be a GUI based tool to build,
 flash and debug [Krux](https://github.com/selfcustody/krux)
