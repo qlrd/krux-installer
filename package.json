@@ -1,6 +1,6 @@
 {
   "name": "krux-installer",
-  "version": "0.0.1-alpha-6",
+  "version": "v0.0.1-beta.745caad1",
   "main": "dist-electron/main/index.js",
   "description": "Graphical User Interface to download, verify and flash Krux´s firmware on Kendryte K210 hardwares as bitcoin signature devices",
   "author": "qlrd <106913782+qlrd@users.noreply.github.com>",
@@ -35,7 +35,8 @@
     "build": "vue-tsc --noEmit && vite build && electron-builder",
     "preview": "vite preview",
     "e2e": "wdio run wdio.conf.mts",
-    "lint:md": "markdownlint README.md --ignore node_modules"
+    "lint:md": "markdownlint README.md --ignore node_modules",
+    "name:beta-version": "echo v0.0.1-beta.$(cat package.json | sha256sum | cut -c -8)"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.9",
