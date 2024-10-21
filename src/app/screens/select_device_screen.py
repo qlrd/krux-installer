@@ -42,12 +42,12 @@ class SelectDeviceScreen(BaseScreen):
             ["m5stickv", "amigo", "dock", "bit", "yahboom", "cube", "wonder_mv"]
         ):
 
-            def _on_press(instance):
+            def on_press(instance):
                 if instance.id in self.enabled_devices:
                     self.debug(f"Calling Button::{instance.id}::on_press")
                     self.set_background(wid=instance.id, rgba=(0.25, 0.25, 0.25, 1))
 
-            def _on_release(instance):
+            def on_release(instance):
                 if instance.id in self.enabled_devices:
                     self.debug(f"Calling Button::{instance.id}::on_release")
                     self.set_background(wid=instance.id, rgba=(0, 0, 0, 1))
@@ -69,8 +69,11 @@ class SelectDeviceScreen(BaseScreen):
                 wid=f"select_device_{device}",
                 root_widget="select_device_screen_grid",
                 text="",
-                on_press=_on_press,
-                on_release=_on_release,
+                font_factor=28,
+                halign=None,
+                on_press=on_press,
+                on_release=on_release,
+                on_ref_press=None,
             )
 
     # pylint: disable=unused-argument
@@ -95,7 +98,10 @@ class SelectDeviceScreen(BaseScreen):
                 ):
                     cleanre = re.compile("\\[.*?\\]")
                     clean_text = re.sub(cleanre, "", value)
-                    if device not in VALID_DEVICES_VERSIONS[clean_text]:
+                    if (
+                        clean_text in VALID_DEVICES_VERSIONS
+                        and device not in VALID_DEVICES_VERSIONS.get(clean_text, [])
+                    ):
                         self.ids[f"select_device_{device}"].text = "".join(
                             ["[color=#333333]", device, "[/color]"]
                         )

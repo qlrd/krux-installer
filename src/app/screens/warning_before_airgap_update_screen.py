@@ -26,26 +26,39 @@ from kivy.clock import Clock
 from src.app.screens.base_screen import BaseScreen
 
 
-class WarningBetaScreen(BaseScreen):
-    """WarningBetaScreen warns user about krux beta versions"""
+class WarningBeforeAirgapUpdateScreen(BaseScreen):
+    """WarningBeforeAirgapUpdateScreen warns user to insert it's FAT32 formatted SDCard"""
 
     def __init__(self, **kwargs):
-        super().__init__(wid="warning_beta_screen", name="WarningBetaScreen", **kwargs)
-        self.make_grid(wid="warning_beta_screen_grid", rows=2, resize_canvas=True)
+        super().__init__(
+            wid="warning_before_airgap_update_screen",
+            name="WarningBeforeAirgapUpdateScreen",
+            **kwargs,
+        )
 
+        self.make_grid(wid=f"{self.id}_grid", rows=2, resize_canvas=True)
         self.make_image(
             wid=f"{self.id}_warn",
             source=self.warn_img,
             root_widget=f"{self.id}_grid",
         )
 
+        self.build_button()
+
+        # load canvas
+        fn = partial(self.update, name=self.name, key="canvas")
+        Clock.schedule_once(fn, 0)
+
+    def build_button(self):
+        """Build the button screen"""
+
         # START of on_press buttons
         def on_ref_press(*args):
             if args[1] == "MainScreen":
-                self.set_screen(name="MainScreen", direction="right")
+                self.set_screen(name="MainScreen", direction="left")
 
-            if args[1] == "SelectVersion":
-                self.set_screen(name="SelectVersionScreen", direction="right")
+            if args[1] == "AirgapUpdateScreen":
+                self.set_screen(name="AirgapUpdateScreen", direction="right")
 
         self.make_button(
             row=0,
@@ -60,10 +73,6 @@ class WarningBetaScreen(BaseScreen):
         )
         self.ids[f"{self.id}_label"].halign = "justify"
 
-        # load canvas
-        fn = partial(self.update, name=self.name, key="canvas")
-        Clock.schedule_once(fn, 0)
-
     # pylint: disable=unused-argument
     def update(self, *args, **kwargs):
         """Update buttons on related screen"""
@@ -77,45 +86,45 @@ class WarningBetaScreen(BaseScreen):
                 setattr(self, "locale", value)
                 self.ids[f"{self.id}_label"].text = self.make_label_text()
 
-        setattr(WarningBetaScreen, "on_update", on_update)
+        setattr(WarningBeforeAirgapUpdateScreen, "on_update", on_update)
         self.update_screen(
             name=name,
             key=key,
             value=value,
-            allowed_screens=("ConfigKruxInstaller", "WarningBetaScreen"),
-            on_update=getattr(WarningBetaScreen, "on_update"),
+            allowed_screens=("ConfigKruxInstaller", "WarningBeforeAirgapUpdateScreen"),
+            on_update=getattr(WarningBeforeAirgapUpdateScreen, "on_update"),
         )
 
     def make_label_text(self):
         """
         Create a warning message where it's content is about
-        the beta (and unsigned) firmware
+        the airgapped procedure to update firmware onto device
         """
-        test_repo = self.translate("This is our test repository")
-        unsg_bin = self.translate(
-            "These are unsigned binaries for the latest and most experimental features"
+        before_warn = self.translate("Before proceeding with the air-gapped update")
+        insert_warn = self.translate(
+            "Insert a FAT32 formatted SDCard into your computer"
         )
-        just_try = self.translate(
-            "and it's just for trying new things and providing feedback."
+        select_warn_0 = self.translate(
+            "On the next screen, choose its root folder to copy the firmware"
         )
         proceed = self.translate("Proceed")
         back = self.translate("Back")
 
         return "".join(
             [
-                f"[color=#efcc00]{test_repo}[/color]",
+                f"[color=#efcc00]{before_warn}:[/color]",
                 "\n",
-                unsg_bin,
+                f"* {insert_warn}",
                 "\n",
-                just_try,
+                f"* {select_warn_0}",
                 "\n",
                 "\n",
-                "[color=#00ff00]",
-                f"[ref=MainScreen]{proceed}[/ref]",
+                "[color=#ff0000]",
+                f"[ref=MainScreen]{back}[/ref]",
                 "[/color]",
                 "        ",
-                "[color=#ff0000]",
-                f"[ref=SelectVersion]{back}[/ref]",
+                "[color=#00ff00]",
+                f"[ref=AirgapUpdateScreen]{proceed}[/ref]",
                 "[/color]",
             ]
         )

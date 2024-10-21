@@ -73,16 +73,17 @@ class SelectVersionScreen(BaseScreen):
             self.set_screen(name="MainScreen", direction="right")
 
         wid = f"{self.id}_latest"
-        setattr(SelectVersionScreen, f"on_press_{wid}", on_press)
-        setattr(SelectVersionScreen, f"on_release_{wid}", on_release)
 
         self.make_button(
             row=0,
             wid=wid,
             root_widget="select_version_screen_grid",
             text=text,
-            on_press=getattr(SelectVersionScreen, f"on_press_{wid}"),
-            on_release=getattr(SelectVersionScreen, f"on_release_{wid}"),
+            font_factor=28,
+            halign=None,
+            on_press=on_press,
+            on_release=on_release,
+            on_ref_press=None,
         )
 
     def build_select_beta_version_button(self, text: str):
@@ -115,16 +116,16 @@ class SelectVersionScreen(BaseScreen):
             self.set_screen(name="WarningBetaScreen", direction="left")
 
         wid = f"{self.id}_beta"
-        setattr(SelectVersionScreen, f"on_press_{wid}", on_press)
-        setattr(SelectVersionScreen, f"on_release_{wid}", on_release)
-
         self.make_button(
             row=1,
             wid=wid,
             root_widget="select_version_screen_grid",
             text=text,
-            on_press=getattr(SelectVersionScreen, f"on_press_{wid}"),
-            on_release=getattr(SelectVersionScreen, f"on_release_{wid}"),
+            font_factor=28,
+            halign=None,
+            on_press=on_press,
+            on_release=on_release,
+            on_ref_press=None,
         )
 
     def build_select_version_old_button(self, text: str):
@@ -140,16 +141,16 @@ class SelectVersionScreen(BaseScreen):
             self.set_screen(name="SelectOldVersionScreen", direction="left")
 
         wid = f"{self.id}_old"
-        setattr(SelectVersionScreen, f"on_press_{wid}", on_press)
-        setattr(SelectVersionScreen, f"on_release_{wid}", on_release)
-
         self.make_button(
             row=2,
             wid=wid,
             root_widget="select_version_screen_grid",
             text=text,
-            on_press=getattr(SelectVersionScreen, f"on_press_{wid}"),
-            on_release=getattr(SelectVersionScreen, f"on_release_{wid}"),
+            font_factor=28,
+            halign=None,
+            on_press=on_press,
+            on_release=on_release,
+            on_ref_press=None,
         )
 
     def build_select_version_back_button(self, text: str):
@@ -165,16 +166,16 @@ class SelectVersionScreen(BaseScreen):
             self.set_screen(name="MainScreen", direction="right")
 
         wid = f"{self.id}_back"
-        setattr(SelectVersionScreen, f"on_press_{wid}", on_press)
-        setattr(SelectVersionScreen, f"on_release_{wid}", on_release)
-
         self.make_button(
             row=3,
             wid=wid,
             root_widget="select_version_screen_grid",
             text=text,
-            on_press=getattr(SelectVersionScreen, f"on_press_{wid}"),
-            on_release=getattr(SelectVersionScreen, f"on_release_{wid}"),
+            font_factor=28,
+            halign=None,
+            on_press=on_press,
+            on_release=on_release,
+            on_ref_press=None,
         )
 
     def fetch_releases(self):

@@ -30,6 +30,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
     ):
         screen = BaseDownloadScreen(wid="mock_screen", name="MockScreen")
         screen.to_screen = "AnotherMockScreen"
+        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely
@@ -83,6 +84,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
         screen = BaseDownloadScreen(wid="mock_screen", name="MockScreen")
         screen.to_screen = "AnotherMockScreen"
         screen.thread = MagicMock(name="mock", target=mock_target)
+        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely
@@ -100,6 +102,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
     )
     def test_on_pre_enter(self, mock_get_locale):
         screen = BaseDownloadScreen(wid="mock_screen", name="MockScreen")
+        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely
@@ -109,11 +112,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
         screen.on_pre_enter()
         text = "".join(
             [
-                f"[size={screen.SIZE_G}]",
                 "Connecting...",
-                "[/size]",
-                "[color=#efcc00]",
-                "[/color]",
             ]
         )
 
@@ -131,6 +130,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
         screen = BaseDownloadScreen(wid="mock_screen", name="MockScreen")
         screen.to_screen = "AnotherMockScreen"
         screen.downloader = None
+        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely
@@ -200,7 +200,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
         screen = BaseDownloadScreen(wid="mock_screen", name="MockScreen")
         build_downloader = MagicMock()
         setattr(screen, "build_downloader", build_downloader)
-
+        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely
@@ -220,7 +220,7 @@ class TestBaseDownloadScreen(GraphicUnitTest):
         screen = BaseDownloadScreen(wid="mock_screen", name="MockScreen")
         on_download_progress = MagicMock()
         setattr(screen, "on_download_progress", on_download_progress)
-
+        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely

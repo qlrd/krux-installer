@@ -111,7 +111,6 @@ class DownloadStableZipSha256Screen(BaseDownloadScreen):
 
         self.ids[f"{self.id}_info"].text = (
             DownloadStableZipSha256Screen.make_download_info(
-                size=self.SIZE_MP,
                 download_msg=self.translate("Downloading"),
                 from_url=url,
                 to_msg=self.translate("to"),
@@ -128,7 +127,6 @@ class DownloadStableZipSha256Screen(BaseDownloadScreen):
 
         self.ids[f"{self.id}_progress"].text = (
             DownloadStableZipSha256Screen.make_progress_info(
-                sizes=(self.SIZE_G, self.SIZE_MP),
                 of_msg=self.translate("of"),
                 percent=percent,
                 downloaded_len=downloaded_len,
@@ -144,11 +142,9 @@ class DownloadStableZipSha256Screen(BaseDownloadScreen):
             filepath = os.path.join(destdir, f"krux-{self.version}.zip.sha256.txt")
             self.ids[f"{self.id}_info"].text = "".join(
                 [
-                    f"[size={self.SIZE_MP}sp]",
                     filepath,
                     "\n",
                     downloaded,
-                    "[/size]",
                 ]
             )
 

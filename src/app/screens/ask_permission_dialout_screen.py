@@ -45,7 +45,7 @@ class AskPermissionDialoutScreen(BaseScreen):
         self.distro = ""
 
         # Build grid where buttons will be placed
-        self.make_grid(wid=f"{self.id}_grid", rows=1)
+        self.make_grid(wid=f"{self.id}_grid", rows=1, resize_canvas=True)
 
         # These variables will setup the inclusion
         # in dialout group, if necessary
@@ -61,23 +61,14 @@ class AskPermissionDialoutScreen(BaseScreen):
             )
 
             self.ids[f"{self.id}_label"].text = "".join(
-                [
-                    f"[size={self.SIZE_M}sp]",
-                    logout_msg,
-                    "\n",
-                    f"{backin_msg}.",
-                    "\n",
-                    "\n",
-                    f"{not_worry_msg}.",
-                    "[/size]",
-                ]
+                [logout_msg, "\n", f"{backin_msg}.", "\n", "\n", f"{not_worry_msg}."]
             )
 
         setattr(
             AskPermissionDialoutScreen, "on_permission_created", on_permission_created
         )
 
-        def _on_ref_press(*args):
+        def on_ref_press(*args):
             if args[1] == "Allow":
                 # If user isnt in the dialout group,
                 # but the configuration was done correctly
@@ -101,17 +92,17 @@ class AskPermissionDialoutScreen(BaseScreen):
             if args[1] == "Deny":
                 AskPermissionDialoutScreen.quit_app()
 
-        self.make_label(
+        self.make_button(
+            row=0,
             wid=f"{self.id}_label",
             text="",
             root_widget=f"{self.id}_grid",
+            font_factor=38,
             halign="justify",
+            on_press=None,
+            on_release=None,
+            on_ref_press=on_ref_press,
         )
-
-        setattr(
-            AskPermissionDialoutScreen, f"on_ref_press_{self.id}_label", _on_ref_press
-        )
-        self.ids[f"{self.id}_label"].bind(on_ref_press=_on_ref_press)
 
         fn = partial(self.update, name=self.name, key="canvas")
         Clock.schedule_once(fn, 0)
@@ -166,27 +157,26 @@ class AskPermissionDialoutScreen(BaseScreen):
         )
         exec_msg = self.translate("to execute the following command")
 
+        command_list_bins = " ".join(self._bin_args or [])
         self.ids[f"{self.id}_label"].text = "".join(
             [
-                f"[size={self.SIZE_G}sp][color=#efcc00]{warn_msg}[/color][/size]",
+                f"[color=#efcc00]{warn_msg}[/color]",
                 "\n",
-                f'[size={self.SIZE_MP}sp]{first_msg} "{self.distro}"',
+                f'{first_msg} "{self.distro}"',
                 "\n",
                 f"{access_msg}.",
                 "\n",
                 proceed_msg,
-                "\n" f"{exec_msg}:",
+                "\n",
+                f"{exec_msg}:",
                 "\n",
                 "[color=#00ff00]",
-                f"{self._bin} {" ".join(self._bin_args or [])} {self.group} {self.user}",
+                f"{self._bin} {command_list_bins} {self.group} {self.user}",
                 "[/color]",
-                "[/size]",
                 "\n",
                 "\n",
-                f"[size={self.SIZE_M}]",
                 "[color=#00FF00][ref=Allow]Allow[/ref][/color]",
                 "        ",
                 "[color=#FF0000][ref=Deny]Deny[/ref][/color]",
-                "[/size]",
             ]
         )
