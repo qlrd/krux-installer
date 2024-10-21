@@ -16,7 +16,6 @@ class TestBaseFlashScreen(GraphicUnitTest):
     )
     def test_init(self, mock_get_locale):
         screen = BaseFlashScreen(wid="mock_screen", name="MockScreen")
-        setattr(screen, "update", MagicMock())
         self.render(screen)
 
         # get your Window instance safely

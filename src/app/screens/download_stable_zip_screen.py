@@ -120,6 +120,7 @@ class DownloadStableZipScreen(BaseDownloadScreen):
 
         self.ids[f"{self.id}_info"].text = "".join(
             [
+                f"[size={self.SIZE_MP}sp]",
                 downloading,
                 "\n",
                 f"[color=#00AABB][ref={url}]{url}[/ref][/color]",
@@ -127,6 +128,7 @@ class DownloadStableZipScreen(BaseDownloadScreen):
                 to,
                 "\n",
                 filepath,
+                "[/size]",
             ]
         )
 
@@ -144,12 +146,14 @@ class DownloadStableZipScreen(BaseDownloadScreen):
         of = self.translate("of")
         self.ids[f"{self.id}_progress"].text = "".join(
             [
-                f"[b]{ percent * 100:,.2f} %[/b]",
+                f"[size={self.SIZE_G}sp][b]{ percent * 100:,.2f} %[/b][/size]",
                 "\n",
+                f"[size={self.SIZE_MP}sp]",
                 downs[0],
                 f" {of} ",
                 downs[1],
                 " MB",
+                "[/size]",
             ]
         )
 
@@ -161,9 +165,11 @@ class DownloadStableZipScreen(BaseDownloadScreen):
             filepath = os.path.join(destdir, f"krux-{self.version}.zip")
             self.ids[f"{self.id}_info"].text = "".join(
                 [
+                    f"[size={self.SIZE_MP}sp]",
                     filepath,
                     "\n",
                     downloaded,
+                    "[/size]",
                 ]
             )
             # When finish, change the label, wait some seconds

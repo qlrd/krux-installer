@@ -30,7 +30,7 @@ from src.app.screens.base_screen import BaseScreen
 
 if sys.platform.startswith("linux"):
     import distro
-    import grp  # pylint: disable=import-error
+    import grp
 
 
 class GreetingsScreen(BaseScreen):
@@ -44,7 +44,7 @@ class GreetingsScreen(BaseScreen):
         )
 
         # Build grid where buttons will be placed
-        self.make_grid(wid=f"{self.id}_grid", rows=1, resize_canvas=True)
+        self.make_grid(wid=f"{self.id}_grid", rows=1)
 
         # Build logo
         self.make_image(
@@ -59,10 +59,8 @@ class GreetingsScreen(BaseScreen):
         redirect to CheckPermissionsScreen and then to MainScreen. Win32 and Mac will be
         redirect to MainScreen.
         """
-        fn_0 = partial(self.update, name=self.name, key="canvas")
-        fn_1 = partial(self.update, name=self.name, key="check-permission")
-        Clock.schedule_once(fn_0, 0)
-        Clock.schedule_once(fn_1, 2.1)
+        fn = partial(self.update, name=self.name, key="canvas")
+        Clock.schedule_once(fn, 0)
 
     # pylint: disable=unused-argument
     def update(self, *args, **kwargs):
@@ -77,8 +75,12 @@ class GreetingsScreen(BaseScreen):
         value = kwargs.get("value")
 
         def on_update():
-            if key == "check-permission":
-                self.check_dialout_permission()
+            if key == "canvas":
+                fn = partial(self.update, name=self.name, key="check-permission-screen")
+                Clock.schedule_once(fn, 2.1)
+
+            if key == "check-permission-screen":
+                self.check_permissions_for_dialout_group()
 
             if key == "check-internet-connection":
                 self.check_internet_connection()
@@ -88,11 +90,11 @@ class GreetingsScreen(BaseScreen):
             name=name,
             key=key,
             value=value,
-            allowed_screens=("KruxInstallerApp", self.name),
+            allowed_screens=("KruxInstallerApp", "GreetingsScreen"),
             on_update=getattr(GreetingsScreen, "on_update"),
         )
 
-    def check_dialout_permission(self):
+    def check_permissions_for_dialout_group(self):
         """
         Here's where the check process start
         first get the current user, then verify
@@ -107,10 +109,10 @@ class GreetingsScreen(BaseScreen):
             _group = None
 
             # detect linux distro
-            if (
-                distro.id() in ("ubuntu", "fedora", "linuxmint")
-                or distro.like() == "debian"
-            ):
+            if distro.id() in ("ubuntu", "fedora", "linuxmint"):
+                _group = "dialout"
+
+            elif distro.like() == "debian":
                 _group = "dialout"
 
             elif distro.id() in ("arch", "manjaro", "slackware", "gentoo"):
@@ -119,22 +121,22 @@ class GreetingsScreen(BaseScreen):
             else:
                 exc = RuntimeError(f"{distro.name(pretty=True)} not supported")
                 self.redirect_exception(exception=exc)
-                return
 
             # loop throug all linux groups and check
             # if the user is registered in the "dialout" group
             for _grp in grp.getgrall():
                 if _group == _grp.gr_name:
+                    self.debug(f"Found {_grp.gr_name}")
                     for _grpuser in _grp[3]:
+                        self.debug(_grpuser)
                         if _grpuser == _user:
-                            self.info(f"'{_user}' already in group '{_group}'")
+                            self.debug(f"'{_user}' already in group '{_group}'")
                             _in_dialout = True
 
             # if user is not in dialout group, warn user
             # and then redirect to a screen that will
             # proceed with the proper operation
             if not _in_dialout:
-                print("NOT")
                 ask = self.manager.get_screen("AskPermissionDialoutScreen")
                 _distro = distro.name(pretty=True)
 
@@ -170,7 +172,7 @@ class GreetingsScreen(BaseScreen):
             main_screen = self.manager.get_screen("MainScreen")
             fn = partial(
                 main_screen.update,
-                name=self.name,
+                name="KruxInstallerApp",
                 key="version",
                 value=selector.releases[0],
             )

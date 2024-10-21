@@ -1,3 +1,4 @@
+import sys
 from unittest.mock import patch, MagicMock, call
 from kivy.base import EventLoop, EventLoopBase
 from kivy.tests.common import GraphicUnitTest
@@ -41,6 +42,24 @@ class TestFlashScreen(GraphicUnitTest):
             screen.update, name=screen.name, key="canvas"
         )
         mock_schedule_once.assert_has_calls([call(mock_partial(), 0)], any_order=True)
+
+    @patch.object(EventLoopBase, "ensure_window", lambda x: None)
+    @patch(
+        "src.app.screens.base_screen.BaseScreen.get_locale", return_value="en_US.UTF-8"
+    )
+    @patch("src.app.screens.base_screen.BaseScreen.redirect_exception")
+    def test_fail_update_wrong_name(self, mock_redirect_exception, mock_get_locale):
+        screen = FlashScreen()
+        self.render(screen)
+
+        # get your Window instance safely
+        EventLoop.ensure_window()
+
+        screen.update(name="MockScreen")
+
+        # patch assertions
+        mock_get_locale.assert_called()
+        mock_redirect_exception.assert_called_once()
 
     @patch.object(EventLoopBase, "ensure_window", lambda x: None)
     @patch(
@@ -177,10 +196,10 @@ class TestFlashScreen(GraphicUnitTest):
         on_data = getattr(FlashScreen, "on_data")
 
         # Let's "print" some previous infos
-        for i in range(4):
+        for i in range(19):
             on_data(f"[color=#00ff00] INFO [/color] mock test message {i}")
 
-        self.assertEqual(len(screen.output), 4)
+        self.assertEqual(len(screen.output), 18)
 
         # Now print programming BIN
         on_data("Programming BIN: |=----------| 0.21% at 21 KiB/s")
@@ -207,10 +226,10 @@ class TestFlashScreen(GraphicUnitTest):
         on_data = getattr(FlashScreen, "on_data")
 
         # Let's "print" some previous infos
-        for i in range(4):
+        for i in range(19):
             on_data(f"[color=#00ff00] INFO [/color] mock test message {i}")
 
-        self.assertEqual(len(screen.output), 4)
+        self.assertEqual(len(screen.output), 18)
 
         # Now print programming BIN
         on_data("*")
@@ -256,10 +275,10 @@ class TestFlashScreen(GraphicUnitTest):
 
         on_data = getattr(FlashScreen, "on_data")
 
-        for i in range(4):
+        for i in range(19):
             on_data(f"[color=#00ff00] INFO [/color] mock test message {i}")
 
-        self.assertEqual(len(screen.output), 4)
+        self.assertEqual(len(screen.output), 18)
 
         # patch assertions
         mock_get_locale.assert_called()
@@ -300,15 +319,24 @@ class TestFlashScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
+
+        if sys.platform in ("linux", "win32"):
+            sizes = [screen.SIZE_M, screen.SIZE_MP, screen.SIZE_P]
+
+        else:
+            sizes = [screen.SIZE_MM, screen.SIZE_M, screen.SIZE_MP]
+
         text = "".join(
             [
-                "[b]PLEASE DO NOT UNPLUG YOUR DEVICE[/b]",
+                f"[size={sizes[1]}sp][b]PLEASE DO NOT UNPLUG YOUR DEVICE[/b][/size]",
                 "\n",
-                "4.76 %",
+                f"[size={sizes[0]}sp]4.76 %[/size]",
                 "\n",
+                f"[size={sizes[2]}sp]",
                 "Flashing ",
                 "[color=#efcc00][b]firmware.bin[/b][/color] at ",
                 "[color=#efcc00][b]21 KiB/s[/b][/color]",
+                "[/size]",
             ]
         )
         on_process = getattr(FlashScreen, "on_process")
@@ -332,10 +360,18 @@ class TestFlashScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
+
+        if sys.platform in ("linux", "win32"):
+            size = screen.SIZE_M
+
+        else:
+            size = screen.SIZE_M
+
         text = "".join(
             [
-                "[b]DONE![/b]",
+                f"[size={size}sp][b]DONE![/b][/size]",
                 "\n",
+                f"[size={size}sp]",
                 "[color=#00FF00]",
                 "[ref=Back][u]Back[/u][/ref]",
                 "[/color]",
@@ -349,6 +385,9 @@ class TestFlashScreen(GraphicUnitTest):
         on_done = getattr(FlashScreen, "on_done")
         on_done(0)
 
+        print(text)
+        print("=============")
+        print(screen.ids[f"{screen.id}_progress"].text)
         self.assertEqual(screen.ids[f"{screen.id}_progress"].text, text)
 
         # patch assertions

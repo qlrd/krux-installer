@@ -21,7 +21,10 @@
 """
 __init__.py
 """
+import os
 import sys
+from functools import partial
+from kivy.clock import Clock
 from kivy.core.window import Window
 from src.app.config_krux_installer import ConfigKruxInstaller
 from src.app.screens.about_screen import AboutScreen
@@ -48,13 +51,6 @@ from src.app.screens.warning_already_downloaded_screen import (
 from src.app.screens.warning_beta_screen import WarningBetaScreen
 from src.app.screens.warning_wipe_screen import WarningWipeScreen
 from src.app.screens.wipe_screen import WipeScreen
-from src.app.screens.airgap_update_screen import AirgapUpdateScreen
-from src.app.screens.warning_before_airgap_update_screen import (
-    WarningBeforeAirgapUpdateScreen,
-)
-from src.app.screens.warning_after_airgap_update_screen import (
-    WarningAfterAirgapUpdateScreen,
-)
 
 
 class KruxInstallerApp(ConfigKruxInstaller):
@@ -62,9 +58,10 @@ class KruxInstallerApp(ConfigKruxInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Window.maximize()
+        Window.maximize()
         # Window.fullscreen = 'auto'
-        Window.size = (1000, 800)
+        print(Window.size)
+        # Window.size = (640, 800)
         self.debug(f"Window.size={Window.size}")
         Window.clearcolor = (0.9, 0.9, 0.9, 1)
 
@@ -93,9 +90,6 @@ class KruxInstallerApp(ConfigKruxInstaller):
             WarningAlreadyDownloadedScreen(),
             WarningWipeScreen(),
             FlashScreen(),
-            WarningBeforeAirgapUpdateScreen(),
-            WarningAfterAirgapUpdateScreen(),
-            AirgapUpdateScreen(),
             WipeScreen(),
             ErrorScreen(),
         ]

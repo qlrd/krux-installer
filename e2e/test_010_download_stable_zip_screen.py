@@ -1,4 +1,5 @@
 import os
+import sys
 from unittest.mock import patch, call, MagicMock
 from kivy.base import EventLoop, EventLoopBase
 from kivy.tests.common import GraphicUnitTest
@@ -130,6 +131,18 @@ class TestDownloadStableZipScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
+        window = EventLoop.window
+
+        fontsize_g = 0
+        fontsize_mp = 0
+
+        if sys.platform in ("linux", "win32"):
+            fontsize_g = window.size[0] // 16
+            fontsize_mp = window.size[0] // 48
+
+        if sys.platform == "darwin":
+            fontsize_g = window.size[0] // 32
+            fontsize_mp = window.size[0] // 128
 
         # do tests
         screen.update(
@@ -141,11 +154,13 @@ class TestDownloadStableZipScreen(GraphicUnitTest):
         # do tests
         text = "".join(
             [
-                "[b]1.00 %[/b]",
+                f"[size={fontsize_g}sp][b]1.00 %[/b][/size]",
                 "\n",
+                f"[size={fontsize_mp}sp]",
                 "0.20",
                 " of ",
                 "20.03 MB",
+                "[/size]",
             ]
         )
 
@@ -165,6 +180,18 @@ class TestDownloadStableZipScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
+        window = EventLoop.window
+
+        fontsize_g = 0
+        fontsize_mp = 0
+
+        if sys.platform in ("linux", "win32"):
+            fontsize_g = window.size[0] // 16
+            fontsize_mp = window.size[0] // 48
+
+        if sys.platform == "darwin":
+            fontsize_g = window.size[0] // 32
+            fontsize_mp = window.size[0] // 128
 
         # do tests
         with patch.object(screen, "trigger") as mock_trigger, patch.object(
@@ -181,21 +208,25 @@ class TestDownloadStableZipScreen(GraphicUnitTest):
             # do tests
             text_progress = "".join(
                 [
-                    "[b]100.00 %[/b]",
+                    f"[size={fontsize_g}sp][b]100.00 %[/b][/size]",
                     "\n",
+                    f"[size={fontsize_mp}sp]",
                     "20.03",
                     " of ",
                     "20.03",
                     " MB",
+                    "[/size]",
                 ]
             )
 
             filepath = os.path.join("mockdir", "krux-v24.07.0.zip")
             text_info = "".join(
                 [
+                    f"[size={fontsize_mp}sp]",
                     filepath,
                     "\n",
                     "downloaded",
+                    "[/size]",
                 ]
             )
 
@@ -253,7 +284,9 @@ class TestDownloadStableZipScreen(GraphicUnitTest):
                 ),
             ]
         )
-        mock_schedule_once.assert_called()
+        mock_schedule_once.assert_has_calls(
+            [call(mock_partial(), 0), call(mock_partial(), 0)]
+        )
 
     @patch.object(EventLoopBase, "ensure_window", lambda x: None)
     @patch(
@@ -312,7 +345,9 @@ class TestDownloadStableZipScreen(GraphicUnitTest):
                 ),
             ]
         )
-        mock_schedule_once.assert_called()
+        mock_schedule_once.assert_has_calls(
+            [call(mock_partial(), 0), call(mock_partial(), 0)]
+        )
         mock_set_screen.assert_called_once_with(
             name="DownloadStableZipSha256Screen", direction="left"
         )

@@ -33,7 +33,7 @@ class BaseFlashScreen(BaseScreen):
 
     def __init__(self, wid: str, name: str, **kwargs):
         super().__init__(wid=wid, name=name, **kwargs)
-        self.make_grid(wid=f"{self.id}_grid", rows=2, resize_canvas=True)
+        self.make_grid(wid=f"{self.id}_grid", rows=2)
         self._firmware = None
         self._baudrate = None
         self._thread = None
@@ -139,11 +139,13 @@ class BaseFlashScreen(BaseScreen):
             done = self.translate("DONE")
             back = self.translate("Back")
             _quit = self.translate("Quit")
+            size = self.SIZE_M
 
             self.ids[f"{self.id}_progress"].text = "".join(
                 [
-                    f"[b]{done}![/b]",
+                    f"[size={size}sp][b]{done}![/b][/size]",
                     "\n",
+                    f"[size={size}sp]",
                     "[color=#00FF00]",
                     f"[ref=Back][u]{back}[/u][/ref]",
                     "[/color]",

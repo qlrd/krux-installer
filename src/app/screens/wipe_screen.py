@@ -21,6 +21,7 @@
 """
 wipe_screen.py
 """
+import sys
 import threading
 import traceback
 from functools import partial
@@ -70,7 +71,7 @@ class WipeScreen(BaseFlashScreen):
             )
             self.output.append(text)
 
-            if len(self.output) > 10:
+            if len(self.output) > 18:
                 del self.output[:1]
 
             if "SPI Flash erased." in text:
@@ -84,7 +85,6 @@ class WipeScreen(BaseFlashScreen):
 
     # pylint: disable=unused-argument
     def on_pre_enter(self, *args):
-        """When pre-enter the screen, clear widgets and build texts"""
         self.ids[f"{self.id}_grid"].clear_widgets()
         self.build_on_data()
         self.build_on_done()
@@ -112,28 +112,19 @@ class WipeScreen(BaseFlashScreen):
             root_widget=f"{self.id}_subgrid",
         )
 
-        self.make_button(
-            row=1,
+        self.make_label(
             wid=f"{self.id}_progress",
             text="",
-            halign="center",
-            font_factor=32,
             root_widget=f"{self.id}_subgrid",
-            on_press=None,
-            on_release=None,
-            on_ref_press=on_ref_press,
+            halign="center",
         )
+        self.ids[f"{self.id}_progress"].bind(on_ref_press=on_ref_press)
 
-        self.make_button(
-            row=2,
+        self.make_label(
             wid=f"{self.id}_info",
             text="",
-            font_factor=72,
             root_widget=f"{self.id}_grid",
             halign="justify",
-            on_press=None,
-            on_release=None,
-            on_ref_press=on_ref_press,
         )
 
     # pylint: disable=unused-argument
@@ -147,7 +138,12 @@ class WipeScreen(BaseFlashScreen):
         self.thread = threading.Thread(name=self.name, target=on_process)
 
         please = self.translate("PLEASE DO NOT UNPLUG YOUR DEVICE")
-        self.ids[f"{self.id}_progress"].text = please
+        if sys.platform in ("linux", "win32"):
+            sizes = [self.SIZE_M, self.SIZE_PP]
+        else:
+            sizes = [self.SIZE_MM, self.SIZE_MP]
+
+        self.ids[f"{self.id}_progress"].text = f"[size={sizes[0]}sp][b]{please}[/b]"
 
         # if anything wrong happen, show it
         def hook(err):
@@ -155,9 +151,38 @@ class WipeScreen(BaseFlashScreen):
                 trace = traceback.format_exception(
                     err.exc_type, err.exc_value, err.exc_traceback
                 )
-                msg = "".join(trace[-2:])
+                msg = "".join(trace)
                 self.error(msg)
-                self.redirect_exception(exception=RuntimeError(f"Wipe failed: {msg}"))
+
+                done = self.translate("DONE")
+                back = self.translate("Back")
+                _quit = self.translate("Quit")
+
+                self.ids[f"{self.id}_progress"].text = "".join(
+                    [
+                        f"[size={sizes[0]}]",
+                        f"[color=#FF0000]{"Wipe failed" if not self.success else done}[/color]",
+                        "[/size]",
+                        "\n",
+                        "\n",
+                        f"[size={sizes[0]}]" "[color=#00FF00]",
+                        f"[ref=Back][u]{back}[/u][/ref]",
+                        "[/color]",
+                        "        ",
+                        "[color=#EFCC00]",
+                        f"[ref=Quit][u]{_quit}[/u][/ref]",
+                        "[/color]",
+                        "[/size]",
+                    ]
+                )
+
+                self.ids[f"{self.id}_info"].text = "".join(
+                    [
+                        f"[size={sizes[1]}]",
+                        msg,
+                        "[/size]",
+                    ]
+                )
 
         # hook what happened
         threading.excepthook = hook

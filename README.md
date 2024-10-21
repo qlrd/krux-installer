@@ -54,13 +54,17 @@ Follow the instructions at [python.org](https://www.python.org/downloads/windows
 
 Before installing `krux-installer` source code, you will need prepare the system:
 
-#### Install `brew` package manager
+<details>
+<summary>Install `brew` package manager</summary>
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-#### Install latest python
+</details>
+
+<details>
+<summary>Install latest python</summary>
 
 ```bash
 brew install python
@@ -72,7 +76,10 @@ and add this line to your `~/.zshrc`:
 alias python=python3
 ```
 
-#### Ensure openssl have a correct link
+</details>
+
+<details>
+<summary> Ensure openssl have a correct link</summary>
 
 Python's `ssl` module relies on OpenSSL for cryptographic operations.
 Ensure that OpenSSL is installed on your system and is compatible with the
@@ -94,8 +101,10 @@ brew link --force openssl
 
 This ensures that the OpenSSL libraries are available in the expected
 locations that Python can find and use.
+</details>
 
-#### Patch your zshrc
+<details>
+<summary>Patch your zshrc</summary>
 
 Library paths on MacOS involves verifying that the environment variables and system
 configurationsare correctyly set to find the necessary libraries, such as OpenSSL,
@@ -114,6 +123,8 @@ OPENSSL_MAJOR_VERSION=`openssl --version | awk '{ print $2}' | cut -d . -f1`
 OPENSSL_FULL_VERSION=`openssl --version | awk ' { print $2}'`
 export DYLD_LIBRARY_PATH="/opt/homebrew/Cellar/openssl@$OPENSSL_MAJOR_VERSION/$OPENSSL_FULL_VERSION/lib:$DYLD_LIBRARY_PATH"
 ```
+
+</details>
 
 ### Install poetry
 
@@ -154,25 +165,35 @@ git submodule update --init
 Krux-Installer uses `poe` task manager for formatting, linting, tests,
 coverage and build.
 
-### See all available tasks
+<details>
+<summary>See all available tasks</summary>
 
 ```bash
 poetry run poe
 ```
 
-### Format code
+</details>
+
+<details>
+<summary>Format code</summary>
 
 ```bash
 poetry run poe format
 ```
 
-### Lint
+</details>
+
+<details>
+<summary>Lint</summary>
 
 ```bash
 poetry run poe lint
 ```
 
-### Test and coverage
+</details>
+
+<details>
+<summary>Test and coverage</summary>
 
 ```bash
 poetry run poe test
@@ -188,20 +209,28 @@ poetry run poe test --no-xvfb
 You can see all coverage results opening you browser and type
 `file:///<folder>/krux-installer/htmlcov/index.html` (assuming
 `folder` is where you placed the `krux-installer` project).
+</details>
 
-### Build for any Linux distribution
+<details>
+<summary>Build for any Linux distribution</summary>
 
 ```bash
 poetry run poe build-linux
 ```
 
-### Build for MacOS
+</details>
+
+<details>
+<summary>Build for MacOS</summary>
 
 ```bash
 poetry run poe build-macos
 ```
 
-### Build for Windows
+</details>
+
+<details>
+<summary>Build for Windows</summary>
 
 ```bash
 poetry run poe build-win
@@ -216,3 +245,4 @@ It will export all project in a
 
 To more options see [.ci/create-spec.py](./.ci/create-spec.py) against the PyInstaller
 [options](https://pyinstaller.org).
+</details>

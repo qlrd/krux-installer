@@ -42,20 +42,26 @@ class TestAboutScreen(GraphicUnitTest):
 
         text = "".join(
             [
-                "[ref=SourceCode][b]v0.0.20-alpha-3[/b][/ref]",
+                f"[size={screen.SIZE_G}sp]",
+                "[ref=SourceCode][b]v0.0.20-alpha-2[/b][/ref]",
+                "[/size]",
                 "\n",
                 "\n",
+                f"[size={screen.SIZE_M}sp]",
                 "follow us on X: ",
                 "[color=#00AABB]",
                 "[ref=X][u]@selfcustodykrux[/u][/ref]",
                 "[/color]",
+                "[/size]",
                 "\n",
                 "\n",
+                f"[size={screen.SIZE_M}sp]",
                 "[color=#00FF00]",
                 "[ref=Back]",
                 "[u]Back[/u]",
                 "[/ref]",
                 "[/color]",
+                "[/size]",
             ]
         )
 
@@ -80,22 +86,33 @@ class TestAboutScreen(GraphicUnitTest):
 
         text = "".join(
             [
-                "[ref=SourceCode][b]v0.0.20-alpha-3[/b][/ref]",
+                f"[size={screen.SIZE_G}sp]",
+                "[ref=SourceCode][b]v0.0.20-alpha-2[/b][/ref]",
+                "[/size]",
                 "\n",
                 "\n",
+                f"[size={screen.SIZE_M}sp]",
                 "siga-nos no X: ",
                 "[color=#00AABB]",
                 "[ref=X][u]@selfcustodykrux[/u][/ref]",
                 "[/color]",
+                "[/size]",
                 "\n",
                 "\n",
+                f"[size={screen.SIZE_M}sp]",
                 "[color=#00FF00]",
                 "[ref=Back]",
                 "[u]Voltar[/u]",
                 "[/ref]",
                 "[/color]",
+                "[/size]",
             ]
         )
+
+        print(text)
+        print("=========")
+        print(label.text)
+
         self.assertEqual(label.text, text)
         mock_get_locale.assert_any_call()
 
@@ -112,9 +129,8 @@ class TestAboutScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
-        button = screen.ids[f"{screen.id}_label"]
 
-        action = getattr(screen.__class__, f"on_ref_press_{button.id}")
+        action = getattr(screen, "on_ref_press_about_screen_label")
         action("Mock", "SourceCode")
 
         mock_get_locale.assert_any_call()
@@ -137,9 +153,8 @@ class TestAboutScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
-        button = screen.ids[f"{screen.id}_label"]
 
-        action = getattr(screen.__class__, f"on_ref_press_{button.id}")
+        action = getattr(screen, "on_ref_press_about_screen_label")
         action("Mock", "X")
 
         mock_get_locale.assert_any_call()
@@ -156,9 +171,8 @@ class TestAboutScreen(GraphicUnitTest):
 
         # get your Window instance safely
         EventLoop.ensure_window()
-        button = screen.ids[f"{screen.id}_label"]
 
-        action = getattr(screen.__class__, f"on_ref_press_{button.id}")
+        action = getattr(screen, "on_ref_press_about_screen_label")
         action("Mock", "Back")
 
         mock_get_locale.assert_any_call()

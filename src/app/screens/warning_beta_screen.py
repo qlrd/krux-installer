@@ -31,12 +31,19 @@ class WarningBetaScreen(BaseScreen):
 
     def __init__(self, **kwargs):
         super().__init__(wid="warning_beta_screen", name="WarningBetaScreen", **kwargs)
-        self.make_grid(wid="warning_beta_screen_grid", rows=2, resize_canvas=True)
+        self.make_grid(wid="warning_beta_screen_grid", rows=2)
 
         self.make_image(
             wid=f"{self.id}_warn",
             source=self.warn_img,
             root_widget=f"{self.id}_grid",
+        )
+
+        self.make_label(
+            wid=f"{self.id}_label",
+            text=self.make_label_text(),
+            root_widget=f"{self.id}_grid",
+            halign="justify",
         )
 
         # START of on_press buttons
@@ -47,20 +54,9 @@ class WarningBetaScreen(BaseScreen):
             if args[1] == "SelectVersion":
                 self.set_screen(name="SelectVersionScreen", direction="right")
 
-        self.make_button(
-            row=0,
-            wid=f"{self.id}_label",
-            text=self.make_label_text(),
-            font_factor=36,
-            halign=None,
-            root_widget=f"{self.id}_grid",
-            on_press=None,
-            on_release=None,
-            on_ref_press=on_ref_press,
-        )
-        self.ids[f"{self.id}_label"].halign = "justify"
+        setattr(WarningBetaScreen, f"on_ref_press_{self.id}", on_ref_press)
+        self.ids[f"{self.id}_label"].bind(on_ref_press=on_ref_press)
 
-        # load canvas
         fn = partial(self.update, name=self.name, key="canvas")
         Clock.schedule_once(fn, 0)
 
@@ -103,13 +99,14 @@ class WarningBetaScreen(BaseScreen):
 
         return "".join(
             [
-                f"[color=#efcc00]{test_repo}[/color]",
+                f"[size={self.SIZE_M}sp][color=#efcc00]{test_repo}[/color][/size]",
                 "\n",
-                unsg_bin,
+                f"[size={self.SIZE_MP}sp]{unsg_bin}[/size]",
                 "\n",
-                just_try,
+                f"[size={self.SIZE_MP}sp]{just_try}[/size]",
                 "\n",
                 "\n",
+                f"[size={self.SIZE_MM}sp]",
                 "[color=#00ff00]",
                 f"[ref=MainScreen]{proceed}[/ref]",
                 "[/color]",
@@ -117,5 +114,6 @@ class WarningBetaScreen(BaseScreen):
                 "[color=#ff0000]",
                 f"[ref=SelectVersion]{back}[/ref]",
                 "[/color]",
+                "[/size]",
             ]
         )

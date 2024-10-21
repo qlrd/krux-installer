@@ -129,7 +129,7 @@ class TestSelectVersionScreen(GraphicUnitTest):
 
         calls = []
         for button in grid.children:
-            action = getattr(screen.__class__, f"on_press_{button.id}")
+            action = getattr(screen, f"on_press_{button.id}")
             action(button)
             if button.id in (
                 "main_select_device",
@@ -205,7 +205,7 @@ class TestSelectVersionScreen(GraphicUnitTest):
         calls_get_screen = []
 
         for button in grid.children:
-            action = getattr(screen.__class__, f"on_release_{button.id}")
+            action = getattr(screen, f"on_release_{button.id}")
             action(button)
             calls_set_background.append(call(wid=button.id, rgba=(0, 0, 0, 1)))
 
@@ -236,8 +236,10 @@ class TestSelectVersionScreen(GraphicUnitTest):
     @patch(
         "src.app.screens.base_screen.BaseScreen.get_locale", return_value="en_US.UTF-8"
     )
+    @patch("src.app.screens.base_screen.BaseScreen.update_screen")
     def test_on_update(
         self,
+        mock_update_screen,
         mock_get_locale,
     ):
         screen = SelectVersionScreen()
@@ -246,3 +248,4 @@ class TestSelectVersionScreen(GraphicUnitTest):
         screen.update(name=screen.name, key="locale", value="en_US")
 
         mock_get_locale.assert_called_once()
+        mock_update_screen.assert_called_once()

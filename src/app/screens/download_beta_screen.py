@@ -48,8 +48,7 @@ class DownloadBetaScreen(BaseDownloadScreen):
             screen = self.manager.get_screen(self.to_screen)
             baudrate = DownloadBetaScreen.get_baudrate()
             destdir = DownloadBetaScreen.get_destdir_assets()
-            _device = getattr(self, "device")
-            maixpy = f"maixpy_{_device}"
+            maixpy = f"maixpy_{getattr(self, "device")}"
             _firmware = getattr(self, "firmware")
             firmware = os.path.join(destdir, "krux_binaries", f"{maixpy}", _firmware)
             partials = [
@@ -80,6 +79,9 @@ class DownloadBetaScreen(BaseDownloadScreen):
 
         self.debug(f"Bind {self.__class__}.on_progress={on_progress}")
         setattr(self.__class__, "on_progress", on_progress)
+
+        fn = partial(self.update, name=self.name, key="canvas")
+        Clock.schedule_once(fn, 0)
 
     # pylint: disable=unused-argument
     def update(self, *args, **kwargs):
@@ -143,6 +145,7 @@ class DownloadBetaScreen(BaseDownloadScreen):
 
         self.ids[f"{self.id}_info"].text = "".join(
             [
+                f"[size={self.SIZE_MP}sp]",
                 downloading,
                 "\n",
                 "[color=#00AABB]",
@@ -153,6 +156,7 @@ class DownloadBetaScreen(BaseDownloadScreen):
                 "\n",
                 self.downloader.destdir,
                 "\n",
+                "[/size]",
             ]
         )
 
@@ -173,9 +177,9 @@ class DownloadBetaScreen(BaseDownloadScreen):
         downs = [f"{lens[0]/(1<<20):,.2f}", f"{lens[1]/(1<<20):,.2f}"]
         self.ids[f"{self.id}_progress"].text = "".join(
             [
-                f"[b]{ percent * 100:,.2f} %[/b]",
+                f"[size={self.SIZE_G}sp][b]{ percent * 100:,.2f} %[/b][/size]",
                 "\n",
-                f"{downs[0]} of {downs[1]} MB",
+                f"[size={self.SIZE_MP}sp]{downs[0]} of {downs[1]} MB[/size]",
             ]
         )
 
@@ -184,9 +188,11 @@ class DownloadBetaScreen(BaseDownloadScreen):
             destdir = os.path.join(self.downloader.destdir, "kboot.kfpkg")
             self.ids[f"{self.id}_info"].text = "".join(
                 [
+                    f"[size={self.SIZE_MP}sp]",
                     destdir,
                     "\n",
                     downloaded,
+                    "[/size]",
                 ]
             )
 

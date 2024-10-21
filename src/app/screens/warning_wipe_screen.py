@@ -21,6 +21,7 @@
 """
 about_screen.py
 """
+import sys
 from functools import partial
 from kivy.clock import Clock
 from src.app.screens.base_screen import BaseScreen
@@ -36,7 +37,7 @@ class WarningWipeScreen(BaseScreen):
             **kwargs,
         )
 
-        self.make_grid(wid=f"{self.id}_grid", rows=2, resize_canvas=True)
+        self.make_grid(wid=f"{self.id}_grid", rows=2)
 
         self.make_image(
             wid=f"{self.id}_warn",
@@ -44,7 +45,14 @@ class WarningWipeScreen(BaseScreen):
             root_widget=f"{self.id}_grid",
         )
 
-        def on_ref_press(*args):
+        self.make_label(
+            wid=f"{self.id}_label",
+            text="",
+            root_widget=f"{self.id}_grid",
+            halign="justify",
+        )
+
+        def _on_ref_press(*args):
             if args[1] == "WipeScreen":
                 partials = []
                 main_screen = self.manager.get_screen("MainScreen")
@@ -76,23 +84,16 @@ class WarningWipeScreen(BaseScreen):
             if args[1] == "MainScreen":
                 self.set_screen(name="MainScreen", direction="right")
 
-        self.make_button(
-            row=0,
-            wid=f"{self.id}_label",
-            text="",
-            font_factor=48,
-            halign=None,
-            root_widget=f"{self.id}_grid",
-            on_press=None,
-            on_release=None,
-            on_ref_press=on_ref_press,
-        )
+        # When [ref] markup text is clicked, do a action like a button
+        setattr(WarningWipeScreen, f"on_ref_press_{self.id}", _on_ref_press)
+        self.ids[f"{self.id}_label"].bind(on_ref_press=_on_ref_press)
 
         fn = partial(self.update, name=self.name, key="canvas")
         Clock.schedule_once(fn, 0)
 
     # pylint: disable=unused-argument
-    def on_enter(self, *args, **kwargs):
+    def on_enter(self, *args):
+        """Invoke make_label_text"""
         self.ids[f"{self.id}_label"].text = self.make_label_text()
 
     # pylint: disable=unused-argument
@@ -133,13 +134,22 @@ class WarningWipeScreen(BaseScreen):
         proceed = self.translate("Proceed")
         back = self.translate("Back")
 
+        if sys.platform in ("linux", "win32"):
+            sizes = [self.SIZE_MP, self.SIZE_P]
+
+        else:
+            sizes = [self.SIZE_MM, self.SIZE_M]
+
         return "".join(
             [
                 "[color=#EFCC00]",
+                f"[size={sizes[0]}]",
                 full_wipe,
+                "[/size]",
                 "[/color]",
                 "\n",
                 "\n",
+                f"[size={sizes[1]}]",
                 f"{operation}:",
                 "\n",
                 f"* {erase}",
@@ -147,8 +157,10 @@ class WarningWipeScreen(BaseScreen):
                 f"* {remove}",
                 "\n",
                 f"* {render}",
+                "[/size]",
                 "\n",
                 "\n",
+                f"[size={sizes[0]}]",
                 "[color=#00FF00]",
                 f"[ref=WipeScreen][u]{proceed}[/u][/ref]",
                 "[/color]",
@@ -156,5 +168,6 @@ class WarningWipeScreen(BaseScreen):
                 "[color=#FF0000]",
                 f"[ref=MainScreen][u]{back}[/u][/ref]",
                 "[/color]",
+                "[/size]",
             ]
         )
