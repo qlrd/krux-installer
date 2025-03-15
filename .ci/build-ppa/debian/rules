@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+%:
+	dh $@ --with python3
+
+override_dh_auto_configure:
+	poetry install --no-interaction --no-root
+
+override_dh_auto_build:
+	poetry run poe build-linux
+
+override_dh_auto_install:
+	dh_auto_install
+	install -Dm755 dist/krux-installer debian/krux-installer/usr/bin/krux-installer

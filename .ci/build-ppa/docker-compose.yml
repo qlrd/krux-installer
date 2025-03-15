@@ -1,0 +1,11 @@
+services:
+  ppa-builder:
+    build:
+      context: ../..  # Set build context to project root
+      dockerfile: .ci/build-ppa/Dockerfile  # Path to Dockerfile
+    environment:
+      - VERSION=${VERSION:-0.0.2-alpha}
+    volumes:
+      - ../../:/source:ro  # Mount project root as read-only
+      - ./output:/output  # Output directory for PPA source package
+      - ./debian:/output/debian  # Output directory for Debian files
