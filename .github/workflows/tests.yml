@@ -30,7 +30,7 @@ jobs:
           architecture: x64
       
       - name: Install poetry dependencies
-        run: poetry install
+        run: poetry install --no-root
 
       - name: Check format/
         run: |
@@ -62,7 +62,7 @@ jobs:
           architecture: x64
 
       - name: Install poetry dependencies
-        run: poetry install
+        run: poetry install --no-root
         
       - name: Lint src/
         run: poetry run poe lint
@@ -117,7 +117,7 @@ jobs:
           python-version: '3.12'
                  
       - name: Install project and its dependencies
-        run: poetry install
+        run: poetry install --no-root
         
       - name: Run tests with coverage (Linux)
         if: ${{ runner.os == 'Linux' }}
