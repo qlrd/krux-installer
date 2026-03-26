@@ -140,7 +140,7 @@ def foo(
     bar: int,
     baz: float,
 ) -> str:
-  str(bar) + str(baz)
+    str(bar) + str(baz)
 ```
 
 prefer:
